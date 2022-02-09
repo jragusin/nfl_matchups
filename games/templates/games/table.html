@@ -1,0 +1,46 @@
+{% block table %}
+<div class="games-table">
+    <table class="table table-hover table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Road Team</th>
+                <th scope="col">Score</th>
+                <th scope="col">Home Team</th>
+                <th scope="col">Score</th>
+                <th scope="col">Date</th>
+                <th scope="col">Boxscore</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for game in games %}
+                <tr>
+                    <td>
+                        {% if game.road_score > game.home_score %}
+                        <strong>
+                            {{ game.road_team }}
+                        </strong>
+                        {% else %}
+                            {{ game.road_team }}
+                        {% endif %}
+                    </td>
+                    <td>{{ game.road_score }}</td>
+                    <td>
+                        {% if game.home_score > game.road_score %}
+                            <strong>
+                                {{ game.home_team }}
+                            </strong>
+                        {% else %}
+                            {{ game.home_team }}
+                        {% endif %}
+                    </td>
+                    <td>{{ game.home_score }}</td>
+                    <td>{{ game.date }}</td>
+                    <td>
+                        <a target="_blank" rel="noopener noreferrer" href="{{ game.link }}">Link</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock table %}

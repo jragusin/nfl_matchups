@@ -1,0 +1,45 @@
+{% block summary %}
+<div class="summarySection {{ direction }}">
+    <section class="ranking item1">
+        <div class="titleItem">
+            <span class="linking">
+                <span class="firstLine">Largest Margin of Victory</span>
+                <span class="secondLine"></span>
+            </span>
+        </div>
+        <div class="stats">
+            {% if team_mov.0 != 0 %}
+                <span class="firstLine" style="color: {{ team_color }}">{{ team_mov.0 }}-{{ team_mov.1 }}</span>
+                <span class="secondLine">
+                    <span>{{ team_mov_date }}</span>
+                </span>
+            {% else %}
+                <span class="firstLine">-</span>
+                <span class="secondLine">
+                    <span></span>
+                </span>
+            {% endif %}
+        </div>
+    </section>
+    <section class="ranking item2">
+        <div class="titleItem">
+            <span class="linking">
+                <span class="firstLine">Longest Win Streak</span>
+                <span class="secondLine"></span>
+            </span>
+        </div>
+        <div class="stats">
+            <span class="firstLine" style="color: {{ team_color }}">{{ team_streak }}</span>
+            {% if team_streak > 1 %}
+                <span class="secondLine">
+                    <span>{{ team_streak_dates.1 }}-{{ team_streak_dates.0 }}</span>
+                </span>
+            {% else %}
+                <span class="secondLine">
+                    <span></span>
+                </span>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock summary %}

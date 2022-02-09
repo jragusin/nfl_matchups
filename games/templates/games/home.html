@@ -1,0 +1,95 @@
+{% extends "games/index.html" %}
+{% block content %}
+<style>
+    .tie-tug {
+        width:{{ tugowar_ratios.2 }}%;
+    }
+
+    .team-one-tug {
+        width:{{ tugowar_ratios.0 }}%;
+    }
+
+    .team-two-tug {
+        width:{{ tugowar_ratios.1 }}%;
+    }
+</style>
+{% load static %}
+<div class="content-section">
+    <div class="row-fluid">
+        <form action="." method="POST">
+            {% csrf_token %}
+            <div class="dropdown left">
+                <select class="form-select" aria-label="Default select example" name="team1">
+                    <option {% if not first %} selected {% endif %} disabled>Team 1</option>
+                    {% for team in teams %}
+                        <option value="{{ team }}" {% if team|stringformat:'s' == first|stringformat:'s' %} selected {% endif %}>{{ team }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="dropdown right">
+                <select class="form-select" aria-label="Default select example" name="team2">
+                    <option {% if not second %} selected {% endif %} disabled>Team 2</option>
+                    {% for team in teams %}
+                        <option value="{{ team }}" {% if team|stringformat:'s' == second|stringformat:'s' %} selected {% endif %}>{{ team }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="btn submitbutton">
+                <button type="submit" class="btn btn-secondary btn-lg" >View Matchups</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="results-section">
+    {% if games %}
+        <div class="row-fluid">
+            <section class="item1 left">
+            {% with 'games/logos/'|add:first|add:'.png' as image1_static %}
+                <img src="{% static image1_static %}" width="180" height="180" alt="{{ first }}">
+            {% endwith %}
+            </section>
+            <section class="item2 left">
+                <div class="tugowarHeadings">
+                    <div class="titleItem left">
+                        <span class="firstLine">{{ record.0 }}</span>
+                        <span class="linking">
+                            <span class="secondLine">Wins</span>
+                        </span>
+                    </div>
+                    <div class="titleItem center">
+                        <span class="firstLine">{{ record.2 }}</span>
+                        <span class="linking">
+                            <span class="secondLine">Ties</span>
+                        </span>
+                    </div>
+                    <div class="titleItem right">
+                        <span class="firstLine">{{ record.1 }}</span>
+                        <span class="linking">
+                            <span class="secondLine">Wins</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="tugowarChart">
+                    <div class="team-one-tug" style="background-color:{{ team1_color }}"></div>
+                    <div class="tie-tug" style="background-color:#ddd"></div>
+                    <div class="team-two-tug" style="background-color:{{ team2_color }}"></div>
+                </div>
+            </section>
+            <section class="item3 right">
+                {% with 'games/logos/'|add:second|add:'.png' as image2_static %}
+                    <img src="{% static image2_static %}" width="180" height="180" alt="{{ second }}">
+                {% endwith %}
+            </section>
+        </div>
+
+        <div class="row-fluid">
+            {% include "games/summary.html" with team_mov=team1_mov team_color=team1_color team_mov_date=team1_mov_date team_streak=team1_streak team_streak_dates=team1_streak_dates direction="left" %}
+            {% include "games/summary.html" with team_mov=team2_mov team_color=team2_color team_mov_date=team2_mov_date team_streak=team2_streak team_streak_dates=team2_streak_dates direction="right" %}
+        </div>
+        <div class="row-fluid">
+            {% include "games/chart.html" with mov_data=mov_data %}
+            {% include "games/table.html" with games=games %}
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}
